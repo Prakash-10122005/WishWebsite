@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Happy Birthday</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+
+<!-- TAP SCREEN -->
+<div id="startScreen">
+  <h2>🎉 Tap to Open Birthday Surprise 🎉</h2>
+</div>
+
+<!-- INTRO -->
+<div id="intro" style="display:none;">
+  <div class="cinema-text small">A SPECIAL DAY</div>
+  <div class="cinema-text big" id="introName"></div>
+  <div class="cinema-text fade">IS HERE...</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+<h1 id="message"></h1>
+<p id="quote"></p>
+
+<img id="photo" class="photo">
+
+<div class="balloons">
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+</div>
+
+<!-- ⚠️ YOUR SAME SONG (no change) -->
+<audio id="music" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name") || "Friend";
+const img = params.get("img");
+
+const startScreen = document.getElementById("startScreen");
+const intro = document.getElementById("intro");
+const music = document.getElementById("music");
+
+// typing function
+function typeText(el, text, speed=70){
+  el.innerHTML="";
+  let i=0;
+  function t(){
+    if(i<text.length){
+      el.innerHTML+=text.charAt(i);
+      i++;
+      setTimeout(t,speed);
+    }
+  }
+  t();
+}
+
+// 🔥 ONLY START AFTER TAP (perfect sync)
+startScreen.addEventListener("click", () => {
+
+  // play your song instantly
+  music.currentTime = 0;
+  music.play();
+
+  // hide tap screen
+  startScreen.style.display = "none";
+
+  // show intro NOW
+  intro.style.display = "flex";
+
+  // start typing name
+  typeText(document.getElementById("introName"), name, 100);
+
+  // after intro
+  setTimeout(()=>{
+    intro.style.display="none";
+
+    const main = document.getElementById("main");
+    main.style.display="block";
+    main.classList.add("show");
+
+    typeText(document.getElementById("message"),
+      "💖 Happy Birthday " + name + " 💖");
+
+  }, 5000);
+
+});
+
+// image
+if (img) {
+  document.getElementById("photo").src = decodeURIComponent(img);
+}
+
+// quotes
+const quotes = [
+  "💖 You make life beautiful 💖",
+  "🌸 Stay happy always 🌸",
+  "🎉 Enjoy your special day 🎉",
+  "❤️ You are truly special ❤️",
+  "✨ You deserve everything ✨"
+];
+
+let i=0;
+function changeQuote(){
+  typeText(document.getElementById("quote"), quotes[i],50);
+  i=(i+1)%quotes.length;
+}
+
+// start quotes after main appears
+setTimeout(()=>{
+  changeQuote();
+  setInterval(changeQuote,3000);
+}, 5500);
+
+// confetti
+setInterval(()=>{
+  confetti({particleCount:80,spread:60});
+},2500);
+
+</script>
+
+</body>
+</html>
