@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Special Wish Creator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🎉 Create Special Wish 🎉</h1>
+
+<input type="text" id="name" placeholder="Enter name"><br><br>
+
+<select id="eventType">
+  <option value="birthday">🎂 Birthday</option>
+  <option value="anniversary">💍 Anniversary</option>
+  <option value="congrats">🎉 Congratulations</option>
+  <option value="love">❤️ Love Message</option>
+</select>
+<br><br>
+
+<input type="file" id="photos" accept="image/*" multiple><br><br>
+
+<button onclick="generate()">Generate</button>
+
+<br><br>
+
+<button onclick="goToPage()" id="goBtn" style="display:none;">
+🎉 Click to Open Wish Page 🎉
+</button>
+
+<br><br>
+
+<p id="shareText" style="display:none;">Share this link:</p>
+<input type="text" id="link" readonly style="width:90%; display:none;"><br><br>
+
+<button onclick="shareWhatsApp()" id="waBtn" style="display:none;">
+📲 Share on WhatsApp
+</button>
+
+<script>
+let generatedLink = "";
+
+async function generate() {
+  const name = document.getElementById("name").value.trim();
+  const files = document.getElementById("photos").files;
+  const type = document.getElementById("eventType").value;
+
+  if (!name || files.length === 0) {
+    alert("Enter name and select photos!");
+    return;
+  }
+
+  let imageUrls = [];
+
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "birthday_upload");
+
+    const res = await fetch("https://api.cloudinary.com/v1_1/ddmg7xtsl/image/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+    imageUrls.push(data.secure_url);
+  }
+
+  const base = window.location.origin + "/";
+
+  generatedLink = `${base}page2.html?name=${encodeURIComponent(name)}&imgs=${encodeURIComponent(JSON.stringify(imageUrls))}&type=${type}`;
+
+  document.getElementById("link").value = generatedLink;
+  document.getElementById("link").style.display = "block";
+  document.getElementById("shareText").style.display = "block";
+  document.getElementById("goBtn").style.display = "inline-block";
+  document.getElementById("waBtn").style.display = "inline-block";
+}
+
+function goToPage() {
+  window.location.href = generatedLink;
+}
+
+function shareWhatsApp() {
+  const text = "🎉 Special Surprise For You 🎉\n" + generatedLink;
+  window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank");
+}
+</script>
+
+</body>
+</html>

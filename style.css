@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Pacifico&display=swap');
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  text-align: center;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  /* Smooth, animated multi-color gradient */
+  background: linear-gradient(-45deg, #ff6a88, #ff99ac, #c77dff, #7209b7);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
+  min-height: 100vh;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* --- Form Elements (index.html) --- */
+input[type="text"], select {
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  width: 280px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+input[type="file"] {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  border: 1px dashed white;
+  color: white;
+}
+
+button {
+  background: #ffffff;
+  color: #ff4d6d;
+  border: none;
+  padding: 12px 30px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  margin: 8px;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  background: #ff4d6d;
+  color: white;
+}
+
+#waBtn {
+  background: #25D366;
+  color: white;
+}
+
+/* --- Slideshow & Photo (page2.html) --- */
+.slideshow {
+  width: 220px;
+  height: 220px;
+  margin: 40px auto;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 6px solid white;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  position: relative;
+  background: rgba(255,255,255,0.1);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.2); /* Starting point for zoom */
+  transition: opacity 1s ease-in-out, transform 3s ease-in-out;
+}
+
+.photo.active {
+  opacity: 1;
+  transform: scale(1); /* Smooth zoom-out effect */
+}
+
+/* --- Cinematic Screens --- */
+#startScreen {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, #333, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 300;
+  cursor: pointer;
+}
+
+#startScreen h2 {
+  font-family: 'Pacifico', cursive;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  animation: pulse 2s infinite;
+}
+
+#intro {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.cinema-text.big {
+  font-size: 65px;
+  font-family: 'Pacifico', cursive;
+  color: #ff4d6d;
+  margin: 15px 0;
+  text-shadow: 0 0 20px rgba(255,77,109,0.5);
+}
+
+/* --- Typography --- */
+h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: 3rem;
+  margin-top: 50px;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+}
+
+#quote {
+  font-size: 1.4rem;
+  font-style: italic;
+  height: 40px;
+  margin-top: 20px;
+}
+
+/* --- Balloons --- */
+.balloons { 
+  position: fixed; 
+  bottom: -150px; 
+  width: 100%; 
+  pointer-events: none; 
+}
+
+.balloon {
+  width: 60px; height: 85px; border-radius: 50%;
+  position: absolute; animation: floatUp 12s linear infinite;
+  opacity: 0.8;
+}
+
+.balloon::after {
+  content: "";
+  position: absolute;
+  bottom: -40px;
+  left: 30px;
+  width: 1px;
+  height: 40px;
+  background: rgba(255,255,255,0.4);
+}
+
+.balloon:nth-child(1){left:10%; background:#ff4d6d; animation-delay: 0s;}
+.balloon:nth-child(2){left:30%; background:#ffbe0b; animation-delay: 3s;}
+.balloon:nth-child(3){left:55%; background:#3a86ff; animation-delay: 1s;}
+.balloon:nth-child(4){left:75%; background:#8338ec; animation-delay: 5s;}
+.balloon:nth-child(5){left:90%; background:#fb5607; animation-delay: 2s;}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-1200px) rotate(20deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+@keyframes fadeIn { to { opacity: 1; } }
