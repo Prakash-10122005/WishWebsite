@@ -1,160 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Special Wish</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Surprise ✨</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
+<body class="wish-page">
 
-<body>
+  <!-- Tap-to-start overlay -->
+  <div id="startScreen">
+    <div class="start-inner">
+      <div class="start-ring"></div>
+      <div class="start-ring r2"></div>
+      <div class="start-ring r3"></div>
+      <p class="start-hint">tap anywhere</p>
+      <h2 class="start-title">A Special Surprise<br>Awaits You ✨</h2>
+    </div>
+  </div>
 
-<div id="startScreen">
-  <h2>🎉 Tap to Open Your Surprise 🎉</h2>
-</div>
+  <!-- Cinematic name reveal -->
+  <div id="intro">
+    <div class="film-grain"></div>
+    <div class="intro-label">✦ &nbsp; A SPECIAL MOMENT &nbsp; ✦</div>
+    <div class="intro-name" id="introName"></div>
+    <div class="intro-sub">is here…</div>
+  </div>
 
-<div id="intro" style="display:none;">
-  <div class="cinema-text small">A SPECIAL MOMENT</div>
-  <div class="cinema-text big" id="introName"></div>
-  <div class="cinema-text fade">IS HERE...</div>
-</div>
+  <!-- Main wish screen -->
+  <div id="main">
 
-<div id="main">
+    <!-- Full-screen background slideshow -->
+    <div class="bg-slides" id="bgSlides"></div>
+    <div class="bg-overlay"></div>
 
-<h1 id="message"></h1>
-<p id="quote"></p>
+    <!-- Floating petals / particles -->
+    <div class="petals" id="petals"></div>
 
-<!-- Slideshow -->
-<div class="slideshow">
-  <img id="photo" class="photo active">
-</div>
+    <!-- Balloons -->
+    <div class="balloons" id="balloons"></div>
 
-<div class="balloons">
-  <div class="balloon"></div>
-  <div class="balloon"></div>
-  <div class="balloon"></div>
-  <div class="balloon"></div>
-  <div class="balloon"></div>
-</div>
+    <!-- Content -->
+    <div class="wish-content">
+      <h1 class="wish-title" id="message"></h1>
+      <p class="wish-quote" id="quote"></p>
+    </div>
 
-<audio id="music" loop>
-  <source src="song.mp3" type="audio/mpeg">
-</audio>
+  </div>
 
-</div>
+  <audio id="music" loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
 
-<script>
-const params = new URLSearchParams(window.location.search);
-const name = params.get("name") || "Friend";
-const type = params.get("type") || "birthday";
-const imgsParam = params.get("imgs");
+  <script>
+    const params  = new URLSearchParams(window.location.search);
+    const name    = params.get("name") || "Friend";
+    const type    = params.get("type") || "birthday";
+    const imgsRaw = params.get("imgs");
+    const images  = imgsRaw ? JSON.parse(decodeURIComponent(imgsRaw)) : [];
 
-let images = imgsParam ? JSON.parse(decodeURIComponent(imgsParam)) : [];
+    const music = document.getElementById("music");
 
-const music = document.getElementById("music");
+    /* ---- Data ---- */
+    const data = {
+      birthday:    { msg:`Happy Birthday ${name}`,   quotes:["May your day be as radiant as you are 🌸","Wishing you joy, laughter & endless love 💖","Another year more wonderful 🎉"] },
+      anniversary: { msg:`Happy Anniversary ${name}`, quotes:["Two hearts, one beautiful journey 💍","Love grows deeper with every passing year ❤️","Here's to forever 🌹"] },
+      congrats:    { msg:`Congratulations ${name}`,   quotes:["You made it happen — we always knew you would 🔥","Proud doesn't even begin to cover it ✨","Sky is just the starting point 🚀"] },
+      love:        { msg:`For You, ${name}`,           quotes:["You are my favourite person in the world ❤️","Every moment with you is a treasure 💖","I love you — more every single day 🌹"] }
+    };
 
-function typeText(el, text, speed=70){
-  el.innerHTML="";
-  let i=0;
-  function t(){
-    if(i<text.length){
-      el.innerHTML+=text.charAt(i);
-      i++;
-      setTimeout(t,speed);
+    const d = data[type] || data.birthday;
+
+    /* ---- Typewriter ---- */
+    function typeText(el, text, speed=60){
+      el.innerHTML = "";
+      let i = 0;
+      (function t(){ if(i<text.length){ el.innerHTML+=text.charAt(i++); setTimeout(t,speed); } })();
     }
-  }
-  t();
-}
 
-function getMessage(type, name){
-  if(type==="birthday") return "🎂 Happy Birthday " + name + " 💖";
-  if(type==="anniversary") return "💍 Happy Anniversary " + name + " 💖";
-  if(type==="congrats") return "🎉 Congratulations " + name + " 🎉";
-  if(type==="love") return "❤️ Dear " + name + " 💖";
-}
+    /* ---- Build balloons ---- */
+    const balloonColors = ["#ff4d6d","#ffbe0b","#3a86ff","#8338ec","#fb5607","#ff006e","#06d6a0"];
+    const balloonWrap   = document.getElementById("balloons");
+    for(let i=0;i<12;i++){
+      const b = document.createElement("div");
+      b.className = "balloon";
+      b.style.cssText = `left:${Math.random()*95}%;background:${balloonColors[i%balloonColors.length]};animation-delay:${Math.random()*14}s;animation-duration:${10+Math.random()*8}s;width:${50+Math.random()*30}px;height:${70+Math.random()*40}px`;
+      balloonWrap.appendChild(b);
+    }
 
-// 💬 Quotes based on type
-function getQuotes(type){
-  if(type==="birthday") return [
-    "🎉 Enjoy your day 🎉",
-    "💖 Stay happy always 💖",
-    "🌸 You are amazing 🌸"
-  ];
+    /* ---- Build petals ---- */
+    const petalWrap = document.getElementById("petals");
+    const petalEmojis = ["🌸","🌺","✨","💫","⭐","🌹","💖"];
+    for(let i=0;i<18;i++){
+      const p = document.createElement("div");
+      p.className = "petal";
+      p.textContent = petalEmojis[i%petalEmojis.length];
+      p.style.cssText = `left:${Math.random()*100}%;animation-delay:${Math.random()*12}s;animation-duration:${8+Math.random()*8}s;font-size:${14+Math.random()*18}px`;
+      petalWrap.appendChild(p);
+    }
 
-  if(type==="anniversary") return [
-    "💍 Together forever 💍",
-    "❤️ Love grows stronger ❤️",
-    "🌹 Beautiful journey 🌹"
-  ];
+    /* ---- Build bg slideshow ---- */
+    const bgWrap = document.getElementById("bgSlides");
+    if(images.length > 0){
+      images.forEach((src,i)=>{
+        const slide = document.createElement("div");
+        slide.className = "bg-slide" + (i===0?" active":"");
+        slide.style.backgroundImage = `url(${src})`;
+        bgWrap.appendChild(slide);
+      });
 
-  if(type==="congrats") return [
-    "🔥 You did it 🔥",
-    "🎉 Proud of you 🎉",
-    "✨ Keep shining ✨"
-  ];
+      let cur = 0;
+      setInterval(()=>{
+        const slides = bgWrap.querySelectorAll(".bg-slide");
+        slides[cur].classList.remove("active");
+        cur = (cur+1) % slides.length;
+        slides[cur].classList.add("active");
+      }, 4000);
+    }
 
-  if(type==="love") return [
-    "❤️ I Love You So Much ❤️",
-    "💖 You are my everything 💖",
-    "🌹 Forever love 🌹"
-  ];
-}
+    /* ---- Tap to start ---- */
+    document.getElementById("startScreen").addEventListener("click",()=>{
+      music.play().catch(()=>{});
+      document.getElementById("startScreen").style.opacity = "0";
+      setTimeout(()=>{ document.getElementById("startScreen").style.display="none"; }, 600);
 
-// Tap start
-document.getElementById("startScreen").addEventListener("click", () => {
+      const intro = document.getElementById("intro");
+      intro.classList.add("visible");
+      setTimeout(()=>typeText(document.getElementById("introName"), name, 100), 600);
 
-  music.play();
-  document.getElementById("startScreen").style.display="none";
+      setTimeout(()=>{
+        intro.classList.remove("visible");
+        setTimeout(()=>{
+          const main = document.getElementById("main");
+          main.classList.add("visible");
+          // Full title — gradient is applied via CSS on .wish-title
+          document.getElementById("message").textContent = d.msg;
+          startQuotes();
+          fireConfetti();
+        }, 600);
+      }, 4200);
+    });
 
-  const intro = document.getElementById("intro");
-  intro.style.display="flex";
+    /* ---- Quotes ---- */
+    let qi = 0;
+    function startQuotes(){
+      typeText(document.getElementById("quote"), d.quotes[0], 45);
+      qi = 1;
+      setInterval(()=>{
+        typeText(document.getElementById("quote"), d.quotes[qi%d.quotes.length], 45);
+        qi++;
+      }, 4000);
+    }
 
-  typeText(document.getElementById("introName"), name, 100);
-
-  setTimeout(()=>{
-    intro.style.display="none";
-
-    const main = document.getElementById("main");
-    main.style.display="block";
-    main.classList.add("show");
-
-    typeText(document.getElementById("message"), getMessage(type, name));
-
-  }, 4000);
-});
-
-// 🎬 SLIDESHOW WITH FADE + ZOOM
-let index = 0;
-const photo = document.getElementById("photo");
-
-function showNextImage(){
-  if(images.length === 0) return;
-
-  photo.classList.remove("active");
-
-  setTimeout(()=>{
-    photo.src = images[index];
-    photo.classList.add("active");
-    index = (index + 1) % images.length;
-  }, 500);
-}
-
-setInterval(showNextImage, 2500);
-showNextImage();
-
-// quotes
-const quotes = getQuotes(type);
-let q = 0;
-
-setInterval(()=>{
-  typeText(document.getElementById("quote"), quotes[q],50);
-  q = (q + 1) % quotes.length;
-},3000);
-
-// confetti
-setInterval(()=>{
-  confetti({particleCount:80,spread:60});
-},2500);
-</script>
-
+    /* ---- Confetti ---- */
+    function fireConfetti(){
+      confetti({ particleCount:120, spread:80, origin:{y:0.55} });
+      setInterval(()=>{ confetti({ particleCount:60, spread:55, origin:{x:Math.random(), y:Math.random()*0.5+0.3} }); }, 3500);
+    }
+  </script>
 </body>
 </html>
