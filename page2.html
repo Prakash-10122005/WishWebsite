@@ -5,49 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Surprise ✨</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cinzel:wght@400;600&family=DM+Sans:wght@300;400;500&family=Great+Vibes&family=Tenor+Sans&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body class="wish-page">
 
-  <!-- Tap-to-start overlay -->
+  <!-- START SCREEN -->
   <div id="startScreen">
+    <canvas id="startCanvas"></canvas>
     <div class="start-inner">
-      <div class="start-ring"></div>
-      <div class="start-ring r2"></div>
-      <div class="start-ring r3"></div>
-      <p class="start-hint">tap anywhere</p>
-      <h2 class="start-title">A Special Surprise<br>Awaits You ✨</h2>
+      <div class="start-ring sr1"></div>
+      <div class="start-ring sr2"></div>
+      <div class="start-ring sr3"></div>
+      <div class="start-ring sr4"></div>
+      <div class="start-content">
+        <div class="start-gem">✦</div>
+        <h2 class="start-title">A Special<br>Surprise Awaits</h2>
+        <div class="start-divider">
+          <span></span><span class="sd-dot">◆</span><span></span>
+        </div>
+        <p class="start-hint">tap anywhere to open</p>
+      </div>
     </div>
   </div>
 
-  <!-- Cinematic name reveal -->
+  <!-- INTRO SCREEN -->
   <div id="intro">
-    <div class="film-grain"></div>
-    <div class="intro-label">✦ &nbsp; A SPECIAL MOMENT &nbsp; ✦</div>
-    <div class="intro-name" id="introName"></div>
-    <div class="intro-sub">is here…</div>
+    <canvas id="introCanvas"></canvas>
+    <div class="intro-inner">
+      <div class="intro-label">✦ &nbsp; A SPECIAL MOMENT &nbsp; ✦</div>
+      <div class="intro-name" id="introName"></div>
+      <div class="intro-sub">is here…</div>
+    </div>
   </div>
 
-  <!-- Main wish screen -->
+  <!-- MAIN WISH SCREEN -->
   <div id="main">
-
-    <!-- Full-screen background slideshow -->
     <div class="bg-slides" id="bgSlides"></div>
     <div class="bg-overlay"></div>
-
-    <!-- Floating petals / particles -->
-    <div class="petals" id="petals"></div>
-
-    <!-- Balloons -->
+    <div class="particles-wish" id="wishParticles"></div>
     <div class="balloons" id="balloons"></div>
 
-    <!-- Content -->
-    <div class="wish-content">
-      <h1 class="wish-title" id="message"></h1>
-      <p class="wish-quote" id="quote"></p>
+    <!-- Side sparkles -->
+    <div class="side-sparkles left-sparkles">
+      <span>✦</span><span>✧</span><span>✦</span><span>✧</span>
+    </div>
+    <div class="side-sparkles right-sparkles">
+      <span>✦</span><span>✧</span><span>✦</span><span>✧</span>
     </div>
 
+    <div class="wish-content">
+      <!-- Top ornament -->
+      <div class="wish-ornament">
+        <span class="wo-line"></span>
+        <span class="wo-gem">◆</span>
+        <span class="wo-line"></span>
+      </div>
+      <h1 class="wish-title" id="message"></h1>
+      <div class="wish-quote-wrap">
+        <p class="wish-quote" id="quote"></p>
+      </div>
+      <!-- Bottom ornament -->
+      <div class="wish-ornament bottom-wo">
+        <span class="wo-gem small">✦</span>
+        &nbsp;&nbsp;
+        <span class="wo-gem small">✦</span>
+        &nbsp;&nbsp;
+        <span class="wo-gem small">✦</span>
+      </div>
+    </div>
   </div>
 
   <audio id="music" loop>
@@ -56,108 +82,162 @@
 
   <script>
     const params  = new URLSearchParams(window.location.search);
-    const name    = params.get("name") || "Friend";
-    const type    = params.get("type") || "birthday";
+    const name    = params.get("name")||"Friend";
+    const type    = params.get("type")||"birthday";
+    const view    = params.get("view")||"mobile";
     const imgsRaw = params.get("imgs");
     const images  = imgsRaw ? JSON.parse(decodeURIComponent(imgsRaw)) : [];
 
+    /* Apply PC class */
+    if(view==="pc") document.body.classList.add("pc-view");
+
     const music = document.getElementById("music");
 
-    /* ---- Data ---- */
     const data = {
-      birthday:    { msg:`Happy Birthday ${name}`,   quotes:["May your day be as radiant as you are 🌸","Wishing you joy, laughter & endless love 💖","Another year more wonderful 🎉"] },
-      anniversary: { msg:`Happy Anniversary ${name}`, quotes:["Two hearts, one beautiful journey 💍","Love grows deeper with every passing year ❤️","Here's to forever 🌹"] },
-      congrats:    { msg:`Congratulations ${name}`,   quotes:["You made it happen — we always knew you would 🔥","Proud doesn't even begin to cover it ✨","Sky is just the starting point 🚀"] },
-      love:        { msg:`For You, ${name}`,           quotes:["You are my favourite person in the world ❤️","Every moment with you is a treasure 💖","I love you — more every single day 🌹"] }
+      birthday:    {msg:`Happy Birthday ${name}`,   quotes:["May your day shine as bright as you 🌸","Wishing you endless joy & love 💖","Another year more wonderful 🎉","Celebrate yourself today ✨","You deserve all the happiness 💫"]},
+      anniversary: {msg:`Happy Anniversary ${name}`, quotes:["Two hearts, one beautiful journey 💍","Love grows deeper with every year ❤️","Here's to forever together 🌹","Your love story inspires us all 💑","Every day with you is a blessing ✨"]},
+      congrats:    {msg:`Congratulations ${name}`,   quotes:["You made it happen! 🔥","We always knew you would 🎯","Sky is just the beginning 🚀","So incredibly proud of you ✨","Your hard work paid off beautifully 🏆"]},
+      love:        {msg:`For You ${name}`,           quotes:["You are my favourite person ❤️","Every moment with you is gold 💖","I love you more every single day 🌹","You mean the world to me 🌍","Forever grateful you're in my life 💫"]}
     };
+    const d = data[type]||data.birthday;
 
-    const d = data[type] || data.birthday;
-
-    /* ---- Typewriter ---- */
-    function typeText(el, text, speed=60){
-      el.innerHTML = "";
-      let i = 0;
-      (function t(){ if(i<text.length){ el.innerHTML+=text.charAt(i++); setTimeout(t,speed); } })();
+    /* ── Typewriter ── */
+    function typeText(el,text,speed=60){
+      el.innerHTML=""; let i=0;
+      (function t(){if(i<text.length){el.innerHTML+=text.charAt(i++);setTimeout(t,speed);}})();
     }
 
-    /* ---- Build balloons ---- */
-    const balloonColors = ["#ff4d6d","#ffbe0b","#3a86ff","#8338ec","#fb5607","#ff006e","#06d6a0"];
-    const balloonWrap   = document.getElementById("balloons");
-    for(let i=0;i<12;i++){
-      const b = document.createElement("div");
-      b.className = "balloon";
-      b.style.cssText = `left:${Math.random()*95}%;background:${balloonColors[i%balloonColors.length]};animation-delay:${Math.random()*14}s;animation-duration:${10+Math.random()*8}s;width:${50+Math.random()*30}px;height:${70+Math.random()*40}px`;
+    /* ── Animated canvas bg for start screen ── */
+    (function startCanvasBg(){
+      const c=document.getElementById("startCanvas");
+      const ctx=c.getContext("2d");
+      function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+      resize(); window.addEventListener("resize",resize);
+      const pts=Array.from({length:80},()=>({
+        x:Math.random()*c.width, y:Math.random()*c.height,
+        vx:(Math.random()-0.5)*0.4, vy:(Math.random()-0.5)*0.4,
+        r:0.8+Math.random()*1.8,
+        hue:Math.random()*360
+      }));
+      function draw(){
+        ctx.clearRect(0,0,c.width,c.height);
+        pts.forEach(p=>{
+          p.x+=p.vx; p.y+=p.vy; p.hue+=0.3;
+          if(p.x<0||p.x>c.width)p.vx*=-1;
+          if(p.y<0||p.y>c.height)p.vy*=-1;
+          ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+          ctx.fillStyle=`hsla(${p.hue},80%,75%,0.65)`;ctx.fill();
+        });
+        // draw faint lines between close points
+        for(let i=0;i<pts.length;i++){
+          for(let j=i+1;j<pts.length;j++){
+            const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+            const dist=Math.sqrt(dx*dx+dy*dy);
+            if(dist<100){
+              ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+              ctx.strokeStyle=`rgba(255,255,255,${0.06*(1-dist/100)})`;
+              ctx.lineWidth=0.5;ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    /* ── Build balloons ── */
+    const bColors=["#ff4d6d","#ffbe0b","#3a86ff","#8338ec","#fb5607","#ff006e","#06d6a0","#f72585","#4cc9f0","#7bf1a8"];
+    const balloonWrap=document.getElementById("balloons");
+    for(let i=0;i<14;i++){
+      const b=document.createElement("div");
+      b.className="balloon";
+      b.style.cssText=`left:${Math.random()*96}%;background:${bColors[i%bColors.length]};animation-delay:${Math.random()*16}s;animation-duration:${9+Math.random()*9}s;width:${48+Math.random()*32}px;height:${68+Math.random()*42}px`;
       balloonWrap.appendChild(b);
     }
 
-    /* ---- Build petals ---- */
-    const petalWrap = document.getElementById("petals");
-    const petalEmojis = ["🌸","🌺","✨","💫","⭐","🌹","💖"];
-    for(let i=0;i<18;i++){
-      const p = document.createElement("div");
-      p.className = "petal";
-      p.textContent = petalEmojis[i%petalEmojis.length];
-      p.style.cssText = `left:${Math.random()*100}%;animation-delay:${Math.random()*12}s;animation-duration:${8+Math.random()*8}s;font-size:${14+Math.random()*18}px`;
-      petalWrap.appendChild(p);
+    /* ── Floating particles ── */
+    const pWrap=document.getElementById("wishParticles");
+    const pEmojis=["🌸","🌺","✨","💫","⭐","🌹","💖","🦋","🌟","💎"];
+    for(let i=0;i<22;i++){
+      const p=document.createElement("div");
+      p.className="wish-petal";
+      p.textContent=pEmojis[i%pEmojis.length];
+      p.style.cssText=`left:${Math.random()*100}%;animation-delay:${Math.random()*14}s;animation-duration:${9+Math.random()*9}s;font-size:${13+Math.random()*20}px`;
+      pWrap.appendChild(p);
     }
 
-    /* ---- Build bg slideshow ---- */
-    const bgWrap = document.getElementById("bgSlides");
-    if(images.length > 0){
+    /* ── Background slideshow or gradient ── */
+    const bgWrap=document.getElementById("bgSlides");
+    if(images.length>0){
       images.forEach((src,i)=>{
-        const slide = document.createElement("div");
-        slide.className = "bg-slide" + (i===0?" active":"");
-        slide.style.backgroundImage = `url(${src})`;
-        bgWrap.appendChild(slide);
+        const s=document.createElement("div");
+        s.className="bg-slide"+(i===0?" active":"");
+        s.style.backgroundImage=`url(${src})`;
+        bgWrap.appendChild(s);
       });
-
-      let cur = 0;
+      let cur=0;
       setInterval(()=>{
-        const slides = bgWrap.querySelectorAll(".bg-slide");
+        const slides=bgWrap.querySelectorAll(".bg-slide");
         slides[cur].classList.remove("active");
-        cur = (cur+1) % slides.length;
+        cur=(cur+1)%slides.length;
         slides[cur].classList.add("active");
-      }, 4000);
+      },5000);
+    } else {
+      // animated gradient background — no images
+      bgWrap.classList.add("gradient-bg");
     }
 
-    /* ---- Tap to start ---- */
+    /* ── Tap to start ── */
     document.getElementById("startScreen").addEventListener("click",()=>{
       music.play().catch(()=>{});
-      document.getElementById("startScreen").style.opacity = "0";
-      setTimeout(()=>{ document.getElementById("startScreen").style.display="none"; }, 600);
+      const ss=document.getElementById("startScreen");
+      ss.style.transition="opacity 0.7s ease";
+      ss.style.opacity="0";
+      setTimeout(()=>ss.style.display="none",700);
 
-      const intro = document.getElementById("intro");
+      const intro=document.getElementById("intro");
       intro.classList.add("visible");
-      setTimeout(()=>typeText(document.getElementById("introName"), name, 100), 600);
+      setTimeout(()=>typeText(document.getElementById("introName"),name,90),500);
 
       setTimeout(()=>{
         intro.classList.remove("visible");
         setTimeout(()=>{
-          const main = document.getElementById("main");
+          const main=document.getElementById("main");
           main.classList.add("visible");
-          // Full title — gradient is applied via CSS on .wish-title
-          document.getElementById("message").textContent = d.msg;
+          document.getElementById("message").textContent=d.msg;
           startQuotes();
-          fireConfetti();
-        }, 600);
-      }, 4200);
+          launchConfetti();
+        },700);
+      },4500);
     });
 
-    /* ---- Quotes ---- */
-    let qi = 0;
+    /* ── Quotes ── */
+    let qi=0;
     function startQuotes(){
-      typeText(document.getElementById("quote"), d.quotes[0], 45);
-      qi = 1;
+      typeText(document.getElementById("quote"),d.quotes[0],40);
+      qi=1;
       setInterval(()=>{
-        typeText(document.getElementById("quote"), d.quotes[qi%d.quotes.length], 45);
-        qi++;
-      }, 4000);
+        const el=document.getElementById("quote");
+        el.style.opacity="0";
+        setTimeout(()=>{
+          typeText(el,d.quotes[qi%d.quotes.length],40);
+          el.style.opacity="1";
+          qi++;
+        },400);
+      },5000);
     }
 
-    /* ---- Confetti ---- */
-    function fireConfetti(){
-      confetti({ particleCount:120, spread:80, origin:{y:0.55} });
-      setInterval(()=>{ confetti({ particleCount:60, spread:55, origin:{x:Math.random(), y:Math.random()*0.5+0.3} }); }, 3500);
+    /* ── Confetti ── */
+    function launchConfetti(){
+      const shoot=()=>{
+        confetti({particleCount:90,spread:70,origin:{y:0.6},colors:["#ffd700","#ff6b9e","#c77dff","#00ffcc","#ff4500"]});
+      };
+      shoot();
+      setTimeout(()=>confetti({particleCount:60,angle:60,spread:55,origin:{x:0,y:0.7}}),700);
+      setTimeout(()=>confetti({particleCount:60,angle:120,spread:55,origin:{x:1,y:0.7}}),1400);
+      setInterval(()=>{
+        confetti({particleCount:35,spread:50,origin:{x:Math.random(),y:Math.random()*0.5+0.3},colors:["#ffd700","#ff6b9e","#c77dff"]});
+      },4000);
     }
   </script>
 </body>

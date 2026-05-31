@@ -3,83 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wish Creator ✨</title>
+  <title>WishCraft ✦ Create Magic</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Great+Vibes&family=Tenor+Sans&display=swap" rel="stylesheet">
 </head>
 <body class="creator-page">
 
-  <div class="blob blob1"></div>
-  <div class="blob blob2"></div>
-  <div class="blob blob3"></div>
+  <!-- Animated particles bg -->
+  <div class="particles" id="particles"></div>
 
   <div class="creator-wrap">
     <div class="creator-card">
-      <div class="card-glow"></div>
+
+      <!-- Top ornament bar -->
+      <div class="ornament-bar">
+        <span class="orn-line"></span>
+        <span class="orn-diamond">◆</span>
+        <span class="orn-text">W I S H C R A F T</span>
+        <span class="orn-diamond">◆</span>
+        <span class="orn-line"></span>
+      </div>
 
       <div class="creator-header">
-        <div class="sparkle-row">✦ &nbsp; ✦ &nbsp; ✦</div>
-        <h1>Craft a Wish</h1>
-        <p class="subtitle">Create a magical surprise for someone special</p>
+        <h1 class="logo-title">Create a<br><em>Magical Wish</em></h1>
+        <p class="subtitle">Craft a stunning surprise for someone extraordinary</p>
       </div>
 
-      <div class="field-group">
-        <label>Their Name</label>
-        <input type="text" id="name" placeholder="e.g. Priya, Arjun…" autocomplete="off">
-      </div>
+      <!-- Fields -->
+      <div class="fields-wrap">
 
-      <div class="field-group">
-        <label>Occasion</label>
-        <div class="select-wrap">
-          <select id="eventType">
-            <option value="birthday">🎂  Birthday</option>
-            <option value="anniversary">💍  Anniversary</option>
-            <option value="congrats">🎉  Congratulations</option>
-            <option value="love">❤️  Love Message</option>
-          </select>
-          <span class="select-arrow">▾</span>
-        </div>
-      </div>
-
-      <div class="field-group">
-        <label>Photos</label>
-        <label class="file-drop" id="fileDrop">
-          <input type="file" id="photos" accept="image/*" multiple hidden>
-          <div class="file-inner">
-            <span class="file-icon">🖼</span>
-            <span class="file-text">Tap to choose photos</span>
-            <span class="file-hint" id="fileHint">No files selected</span>
+        <div class="field-group">
+          <label class="field-label">
+            <span class="label-icon">✦</span> Their Name
+          </label>
+          <div class="input-wrap">
+            <input type="text" id="name" placeholder="Enter their name…" autocomplete="off">
+            <span class="input-glow"></span>
           </div>
-        </label>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">
+            <span class="label-icon">✦</span> Occasion
+          </label>
+          <div class="select-wrap">
+            <select id="eventType">
+              <option value="birthday">🎂  Birthday</option>
+              <option value="anniversary">💍  Anniversary</option>
+              <option value="congrats">🎉  Congratulations</option>
+              <option value="love">❤️  Love Message</option>
+            </select>
+            <span class="select-arrow">❯</span>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">
+            <span class="label-icon">✦</span> Photos
+            <span class="optional-tag">optional</span>
+          </label>
+          <label class="file-drop" id="fileDrop">
+            <input type="file" id="photos" accept="image/*" multiple hidden>
+            <div class="file-inner">
+              <div class="file-icon-wrap">
+                <span class="file-icon">🖼</span>
+                <div class="file-icon-ring"></div>
+              </div>
+              <span class="file-text">Tap to add photos</span>
+              <span class="file-hint" id="fileHint">No photos — a beautiful gradient will be used</span>
+            </div>
+          </label>
+        </div>
+
+      </div><!-- /fields-wrap -->
+
+      <!-- TWO GENERATE BUTTONS -->
+      <div class="gen-btns-row">
+        <button class="gen-btn gen-pc" onclick="generate('pc')">
+          <span class="gen-icon">🖥</span>
+          <span class="gen-label">PC View</span>
+          <span class="gen-sub">Landscape 16:9</span>
+          <div class="btn-shine"></div>
+        </button>
+        <button class="gen-btn gen-mobile" onclick="generate('mobile')">
+          <span class="gen-icon">📱</span>
+          <span class="gen-label">Mobile View</span>
+          <span class="gen-sub">Portrait 9:16</span>
+          <div class="btn-shine"></div>
+        </button>
       </div>
 
-      <button class="gen-btn" onclick="generate()">
-        <span class="btn-text">Generate Surprise ✨</span>
-        <span id="loader" style="display:none">Uploading…</span>
-      </button>
+      <!-- Loader -->
+      <div id="loader-wrap" style="display:none">
+        <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+        <p class="loader-text" id="loaderText">Preparing magic…</p>
+      </div>
 
-      <!-- Result section -->
+      <!-- Result -->
       <div id="result" style="display:none">
-        <div class="divider"></div>
-        <p class="result-label">Your wish link is ready 🎁</p>
+        <div class="divider-fancy">
+          <span class="div-line"></span>
+          <span class="div-gem">✦</span>
+          <span class="div-line"></span>
+        </div>
+
+        <p class="result-label">✨ Your wish is ready to share ✨</p>
+
         <div class="link-row">
           <input type="text" id="link" readonly>
-          <button class="copy-btn" onclick="copyLink()">Copy</button>
+          <button class="copy-btn" onclick="copyLink()">
+            <span id="copyTxt">Copy</span>
+          </button>
         </div>
+
         <div class="action-btns">
-          <button class="action-btn open-btn" onclick="goToPage()">🎉 Open Wish Page</button>
-          <button class="action-btn wa-btn" onclick="shareWhatsApp()">📲 Share on WhatsApp</button>
-          <button class="action-btn vid-btn" id="vidBtn" onclick="downloadVideo()">🎬 Download as Video</button>
+          <button class="action-btn open-btn" onclick="goToPage()">
+            <span class="abtn-icon">🎉</span>
+            <span class="abtn-text">Open Wish Page</span>
+            <div class="btn-shine"></div>
+          </button>
+          <button class="action-btn wa-btn" onclick="shareWhatsApp()">
+            <span class="abtn-icon">📲</span>
+            <span class="abtn-text">Share on WhatsApp</span>
+            <div class="btn-shine"></div>
+          </button>
+          <button class="action-btn vid-btn" id="vidBtn" onclick="downloadVideo()">
+            <span class="abtn-icon">🎬</span>
+            <span class="abtn-text">Download as Video (1:30)</span>
+            <div class="btn-shine"></div>
+          </button>
         </div>
       </div>
 
       <!-- Video progress -->
-      <div id="vidProgress" style="display:none; margin-top:18px;">
+      <div id="vidProgress" style="display:none; margin-top:20px;">
         <div class="vid-progress-label" id="vidLabel">Preparing video…</div>
         <div class="vid-progress-bar"><div class="vid-progress-fill" id="vidFill"></div></div>
       </div>
 
-    </div>
+      <!-- Bottom ornament -->
+      <div class="bottom-orn">✦ &nbsp; ✦ &nbsp; ✦</div>
+
+    </div><!-- /card -->
   </div>
 
   <canvas id="vidCanvas" style="display:none"></canvas>
@@ -89,283 +154,356 @@
     let storedImages  = [];
     let storedName    = "";
     let storedType    = "";
+    let storedView    = "mobile";
 
-    /* ---- Restore form state from sessionStorage on page load ---- */
-    window.addEventListener("DOMContentLoaded", ()=>{
-      const ss = sessionStorage;
-      const savedName = ss.getItem("wn");
-      const savedType = ss.getItem("wt");
-      const savedLink = ss.getItem("wl");
-      const savedHint = ss.getItem("wh");
+    /* ── Animated background particles ─────────────────────────── */
+    (function(){
+      const wrap = document.getElementById("particles");
+      for(let i=0;i<55;i++){
+        const d = document.createElement("div");
+        d.className = "particle";
+        const sz = 1.5 + Math.random()*3;
+        const hue = [0,30,280,200,330][Math.floor(Math.random()*5)];
+        d.style.cssText = `
+          left:${Math.random()*100}%;top:${Math.random()*100}%;
+          width:${sz}px;height:${sz}px;
+          background:hsl(${hue},85%,75%);
+          opacity:${0.2+Math.random()*0.5};
+          animation-delay:${Math.random()*8}s;
+          animation-duration:${6+Math.random()*10}s;
+        `;
+        wrap.appendChild(d);
+      }
+    })();
 
-      if(savedName) document.getElementById("name").value = savedName;
-      if(savedType) document.getElementById("eventType").value = savedType;
-
-      if(savedLink){
-        generatedLink = savedLink;
-        document.getElementById("link").value = savedLink;
-        document.getElementById("result").style.display = "block";
-        if(savedHint) document.getElementById("fileHint").textContent = savedHint;
-        // Note: file inputs cannot be restored (browser security), only show count
+    /* ── Restore state ──────────────────────────────────────────── */
+    window.addEventListener("DOMContentLoaded",()=>{
+      const sn=sessionStorage.getItem("wn"),
+            st=sessionStorage.getItem("wt"),
+            sl=sessionStorage.getItem("wl"),
+            sh=sessionStorage.getItem("wh");
+      if(sn) document.getElementById("name").value=sn;
+      if(st) document.getElementById("eventType").value=st;
+      if(sl){
+        generatedLink=sl;
+        document.getElementById("link").value=sl;
+        document.getElementById("result").style.display="block";
+        if(sh) document.getElementById("fileHint").textContent=sh;
       }
     });
 
-    /* ---- Save state whenever it changes ---- */
     function saveState(){
-      sessionStorage.setItem("wn", document.getElementById("name").value);
-      sessionStorage.setItem("wt", document.getElementById("eventType").value);
-      if(generatedLink) sessionStorage.setItem("wl", generatedLink);
-      sessionStorage.setItem("wh", document.getElementById("fileHint").textContent);
+      sessionStorage.setItem("wn",document.getElementById("name").value);
+      sessionStorage.setItem("wt",document.getElementById("eventType").value);
+      if(generatedLink) sessionStorage.setItem("wl",generatedLink);
+      sessionStorage.setItem("wh",document.getElementById("fileHint").textContent);
     }
 
-    document.getElementById("photos").addEventListener("change", function(){
-      const n = this.files.length;
-      document.getElementById("fileHint").textContent = n + (n===1?" photo selected":" photos selected");
+    document.getElementById("photos").addEventListener("change",function(){
+      const n=this.files.length;
+      document.getElementById("fileHint").textContent = n+(n===1?" photo selected":" photos selected");
     });
 
-    async function generate(){
+    /* ── Generate ────────────────────────────────────────────────── */
+    async function generate(view){
       const name  = document.getElementById("name").value.trim();
       const files = document.getElementById("photos").files;
       const type  = document.getElementById("eventType").value;
 
-      if(!name || files.length === 0){ shake(document.querySelector(".creator-card")); return; }
+      if(!name){ shake(document.querySelector(".creator-card")); return; }
 
       storedName   = name;
       storedType   = type;
+      storedView   = view;
       storedImages = Array.from(files);
 
-      document.querySelector(".btn-text").style.display = "none";
-      document.getElementById("loader").style.display   = "inline";
+      // Disable both buttons
+      document.querySelectorAll(".gen-btn").forEach(b=>b.disabled=true);
+      showLoader("Uploading photos…",0);
 
       let imageUrls = [];
-      for(let file of files){
-        const fd = new FormData();
-        fd.append("file", file);
+      for(let i=0;i<files.length;i++){
+        showLoader(`Uploading photo ${i+1} of ${files.length}…`, Math.round((i/files.length)*80));
+        const fd=new FormData();
+        fd.append("file",files[i]);
         fd.append("upload_preset","birthday_upload");
         const res  = await fetch("https://api.cloudinary.com/v1_1/ddmg7xtsl/image/upload",{method:"POST",body:fd});
         const data = await res.json();
         imageUrls.push(data.secure_url);
       }
 
+      showLoader("Building your wish…",90);
+
       const base = window.location.origin + window.location.pathname.replace("index.html","");
-      generatedLink = `${base}page2.html?name=${encodeURIComponent(name)}&imgs=${encodeURIComponent(JSON.stringify(imageUrls))}&type=${type}`;
+      generatedLink = `${base}page2.html?name=${encodeURIComponent(name)}&imgs=${encodeURIComponent(JSON.stringify(imageUrls))}&type=${type}&view=${view}`;
 
       document.getElementById("link").value = generatedLink;
       document.getElementById("result").style.display = "block";
       saveState();
-      document.querySelector(".btn-text").style.display = "inline";
-      document.getElementById("loader").style.display   = "none";
+      hideLoader();
+      document.querySelectorAll(".gen-btn").forEach(b=>b.disabled=false);
+
+      // Scroll to result
+      document.getElementById("result").scrollIntoView({behavior:"smooth",block:"nearest"});
+    }
+
+    function showLoader(msg,pct){
+      document.getElementById("loader-wrap").style.display="block";
+      document.getElementById("loaderText").textContent=msg;
+      document.getElementById("loaderFill").style.width=pct+"%";
+    }
+    function hideLoader(){
+      document.getElementById("loader-wrap").style.display="none";
     }
 
     function copyLink(){
       navigator.clipboard.writeText(document.getElementById("link").value);
-      const btn = document.querySelector(".copy-btn");
-      btn.textContent = "Copied!";
-      setTimeout(()=>btn.textContent="Copy",2000);
+      document.getElementById("copyTxt").textContent="✓ Copied";
+      setTimeout(()=>document.getElementById("copyTxt").textContent="Copy",2200);
     }
-
-    function goToPage(){ window.location.href = generatedLink; }
-
+    function goToPage(){ window.open(generatedLink,"_blank"); }
     function shareWhatsApp(){
-      window.open("https://wa.me/?text="+encodeURIComponent("🎉 A Special Surprise For You 🎉\n"+generatedLink),"_blank");
+      window.open("https://wa.me/?text="+encodeURIComponent("🎉 A Magical Surprise For You! 🎉\n"+generatedLink),"_blank");
     }
-
     function shake(el){
       el.classList.add("shake");
       setTimeout(()=>el.classList.remove("shake"),500);
     }
 
-    /* ============================================================
-       VIDEO GENERATION — 40 seconds, Canvas + MediaRecorder
-       ============================================================ */
+    /* ================================================================
+       VIDEO — 1 min 30 sec, Canvas + MediaRecorder + Music
+       ================================================================ */
     async function downloadVideo(){
-      if(storedImages.length === 0){ alert("No photos. Please generate first."); return; }
+      document.getElementById("vidBtn").disabled=true;
+      document.getElementById("vidProgress").style.display="block";
 
-      document.getElementById("vidBtn").disabled    = true;
-      document.getElementById("vidBtn").textContent = "⏳ Rendering…";
-      document.getElementById("vidProgress").style.display = "block";
-
-      const W = 720, H = 1280;
-      const canvas = document.getElementById("vidCanvas");
-      canvas.width  = W;
-      canvas.height = H;
-      const ctx = canvas.getContext("2d");
+      const isPC = storedView==="pc";
+      const W = isPC?1920:720, H = isPC?1080:1280;
+      const canvas=document.getElementById("vidCanvas");
+      canvas.width=W; canvas.height=H;
+      const ctx=canvas.getContext("2d");
 
       setLabel("Loading photos…"); setFill(3);
-      const imgs = await Promise.all(storedImages.map(f => loadImg(URL.createObjectURL(f))));
+
+      let imgs=[];
+      if(storedImages.length>0){
+        imgs = await Promise.all(storedImages.map(f=>loadImg(URL.createObjectURL(f))));
+      }
       setFill(8);
 
-      const FPS       = 30;
-      const TOTAL_SEC = 40;
-      const TOTAL_FR  = FPS * TOTAL_SEC;
-      const secPerImg = Math.max(4, TOTAL_SEC / imgs.length);
+      const FPS=30, TOTAL_SEC=90, TOTAL_FR=FPS*TOTAL_SEC;
+      const secPerImg = imgs.length>0 ? Math.max(5, TOTAL_SEC/imgs.length) : TOTAL_SEC;
 
-      const msgMap = {
-        birthday:    { msg:`Happy Birthday, ${storedName} 🎂`,    quotes:["May your day be as radiant as you 🌸","Wishing you joy & endless love 💖","Another year more wonderful 🎉"] },
-        anniversary: { msg:`Happy Anniversary, ${storedName} 💍`, quotes:["Two hearts, one beautiful journey 💍","Love grows deeper every year ❤️","Here's to forever 🌹"] },
-        congrats:    { msg:`Congratulations, ${storedName} 🎉`,   quotes:["You made it happen! 🔥","So proud of you ✨","Sky is just the starting point 🚀"] },
-        love:        { msg:`For You, ${storedName} ❤️`,           quotes:["You are my favourite person ❤️","Every moment with you is a treasure 💖","I love you — more every day 🌹"] }
+      const msgMap={
+        birthday:    {msg:`Happy Birthday ${storedName}`,    quotes:["May your day shine as bright as you 🌸","Wishing you endless joy & love 💖","Every year you grow more wonderful 🎉","Celebrate yourself today 🥂","You deserve all the happiness 💫"]},
+        anniversary: {msg:`Happy Anniversary ${storedName}`, quotes:["Two hearts one beautiful journey 💍","Love grows deeper with every year ❤️","Here's to forever together 🌹","Your love story is extraordinary 💑","Time only makes your bond stronger ✨"]},
+        congrats:    {msg:`Congratulations ${storedName}`,   quotes:["You made it happen! 🔥","We always knew you would 🎯","Sky is just the beginning 🚀","So incredibly proud of you ✨","Your hard work paid off beautifully 🏆"]},
+        love:        {msg:`For You ${storedName}`,           quotes:["You are my favourite person ❤️","Every moment with you is gold 💖","I love you more every single day 🌹","You mean the whole world to me 🌍","Forever grateful you're in my life 💫"]}
       };
-      const evData = msgMap[storedType] || msgMap.birthday;
+      const ev=msgMap[storedType]||msgMap.birthday;
 
-      // Confetti particles
-      const particles = Array.from({length:70},()=>({
-        x:Math.random()*W, y:Math.random()*H,
-        vx:(Math.random()-0.5)*2, vy:1+Math.random()*2,
-        r:4+Math.random()*6,
-        color:`hsl(${Math.random()*360},90%,65%)`,
-        spin:Math.random()*Math.PI*2, spinV:(Math.random()-0.5)*0.2
+      /* Confetti */
+      const confettiPieces=Array.from({length:90},()=>({
+        x:Math.random()*W,y:Math.random()*H,
+        vx:(Math.random()-0.5)*2.5,vy:0.8+Math.random()*2.5,
+        r:3+Math.random()*7,
+        color:`hsl(${Math.random()*360},90%,68%)`,
+        spin:Math.random()*Math.PI*2,spinV:(Math.random()-0.5)*0.2,
+        shape:Math.random()<0.4?"circle":"rect"
       }));
 
-      // Balloons
-      const bColors = ["#ff4d6d","#ffbe0b","#3a86ff","#8338ec","#fb5607","#ff006e","#06d6a0"];
-      const balloons = Array.from({length:8},(_,i)=>({
-        x:W*(0.08+i*0.12), y:H+100+Math.random()*200,
-        w:50+Math.random()*28, h:72+Math.random()*36,
-        vy:0.75+Math.random()*0.8,
+      /* Stars */
+      const stars=Array.from({length:40},()=>({
+        x:Math.random()*W,y:Math.random()*H*0.6,
+        r:0.8+Math.random()*2,
+        twinkle:Math.random()*Math.PI*2
+      }));
+
+      /* Balloons */
+      const bColors=["#ff4d6d","#ffbe0b","#3a86ff","#8338ec","#fb5607","#ff006e","#06d6a0","#f72585"];
+      const balloons=Array.from({length:10},(_,i)=>({
+        x:W*(0.05+i*0.1),y:H+120+Math.random()*250,
+        w:isPC?65:52,h:isPC?90:74,
+        w2:8+Math.random()*20,h2:8+Math.random()*20,
+        vy:isPC?1.0:0.8+Math.random()*0.7,
+        swing:Math.random()*Math.PI*2,swingS:0.008+Math.random()*0.01,
         color:bColors[i%bColors.length]
       }));
 
-      // --- Audio: load song.mp3 via AudioContext and mix into stream ---
+      /* Audio */
       setLabel("Loading music…");
-      let audioCtx, audioSource, audioDest;
-      try {
-        audioCtx  = new AudioContext();
-        const audioRes  = await fetch("song.mp3");
-        const audioData = await audioRes.arrayBuffer();
-        const audioBuf  = await audioCtx.decodeAudioData(audioData);
-        audioDest  = audioCtx.createMediaStreamDestination();
-        audioSource = audioCtx.createBufferSource();
-        audioSource.buffer = audioBuf;
-        audioSource.loop   = true;
+      let audioCtx,audioSource,audioDest;
+      try{
+        audioCtx=new AudioContext();
+        const ab=await(await fetch("song.mp3")).arrayBuffer();
+        const buf=await audioCtx.decodeAudioData(ab);
+        audioDest=audioCtx.createMediaStreamDestination();
+        audioSource=audioCtx.createBufferSource();
+        audioSource.buffer=buf; audioSource.loop=true;
         audioSource.connect(audioDest);
-        // also play in speakers so user can hear while recording
         audioSource.connect(audioCtx.destination);
-      } catch(e){
-        console.warn("Music load failed, recording without audio:", e);
-      }
+      }catch(e){console.warn("No audio:",e);}
 
-      // MediaRecorder setup — combine canvas video + audio tracks
-      const videoStream = canvas.captureStream(FPS);
-      const combinedStream = new MediaStream([
-        ...videoStream.getVideoTracks(),
-        ...(audioDest ? audioDest.stream.getAudioTracks() : [])
-      ]);
-      const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp9,opus")
-                   ? "video/webm;codecs=vp9,opus"
-                   : MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus")
-                   ? "video/webm;codecs=vp8,opus"
-                   : "video/webm";
-      const rec    = new MediaRecorder(combinedStream,{mimeType:mime,videoBitsPerSecond:5_000_000});
-      const chunks = [];
-      rec.ondataavailable = e=>{ if(e.data.size>0) chunks.push(e.data); };
-
-      rec.onstop = ()=>{
-        if(audioSource) audioSource.stop();
-        if(audioCtx)    audioCtx.close();
-        setLabel("Finalising…"); setFill(98);
-        const blob = new Blob(chunks,{type:mime});
-        const url  = URL.createObjectURL(blob);
-        const a    = document.createElement("a");
-        a.href=url; a.download=`wish_${storedName}.webm`; a.click();
-        setTimeout(()=>URL.revokeObjectURL(url),6000);
-        setLabel("✅ Video downloaded!");
+      /* MediaRecorder */
+      const vs=canvas.captureStream(FPS);
+      const cs=new MediaStream([...vs.getVideoTracks(),...(audioDest?audioDest.stream.getAudioTracks():[])]);
+      const mime=MediaRecorder.isTypeSupported("video/webm;codecs=vp9,opus")?"video/webm;codecs=vp9,opus":
+                  MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus")?"video/webm;codecs=vp8,opus":"video/webm";
+      const rec=new MediaRecorder(cs,{mimeType:mime,videoBitsPerSecond:6_000_000});
+      const chunks=[];
+      rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+      rec.onstop=()=>{
+        if(audioSource)audioSource.stop();
+        if(audioCtx)audioCtx.close();
+        setLabel("Finalising video…"); setFill(98);
+        const blob=new Blob(chunks,{type:mime});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement("a");
+        a.href=url; a.download=`wish_${storedName}_${storedView}.webm`; a.click();
+        setTimeout(()=>URL.revokeObjectURL(url),8000);
+        setLabel("✅ Video ready — check your downloads!");
         setFill(100);
-        document.getElementById("vidBtn").disabled    = false;
-        document.getElementById("vidBtn").textContent = "🎬 Download as Video";
+        document.getElementById("vidBtn").disabled=false;
+        document.getElementById("vidBtn").querySelector(".abtn-text").textContent="Download as Video (1:30)";
       };
 
-      // Start audio & recorder together
-      if(audioSource) audioSource.start(0);
+      if(audioSource)audioSource.start(0);
       rec.start();
-      setLabel("Recording video with music (40s)…");
+      setLabel("Recording 1:30 video with music…");
+      document.getElementById("vidBtn").querySelector(".abtn-text").textContent="⏳ Recording…";
 
-      let frame=0, quoteIdx=0, quoteTimer=0;
-      const QUOTE_SWITCH = FPS*4;
+      let frame=0,quoteIdx=0,quoteTimer=0;
+      const QUOTE_SWITCH=FPS*6;
+      const FS=isPC?H*0.075:W*0.072; // font scale
 
       function renderFrame(){
-        if(frame >= TOTAL_FR){ rec.stop(); return; }
+        if(frame>=TOTAL_FR){rec.stop();return;}
 
-        const t      = frame / FPS;
-        const imgIdx = Math.min(Math.floor(t / secPerImg), imgs.length-1);
-        const img    = imgs[imgIdx];
-        const imgT   = (t % secPerImg) / secPerImg;
-
-        // Fade between images
-        const fadeZone = 0.15;
-        let imgAlpha = 1;
-        if(imgT < fadeZone)       imgAlpha = imgT / fadeZone;
-        else if(imgT > 1-fadeZone) imgAlpha = (1-imgT) / fadeZone;
-
-        // Ken Burns
-        const scale = 1 + imgT * 0.07;
-        const sw=W*scale, sh=H*scale;
-        const sx=(sw-W)/2, sy=(sh-H)/2;
+        const t=frame/FPS;
+        const progress=t/TOTAL_SEC; // 0→1
 
         ctx.clearRect(0,0,W,H);
 
-        // Previous image underneath during crossfade
-        if(imgAlpha < 1 && imgIdx > 0){
-          const prev = imgs[imgIdx-1];
-          ctx.globalAlpha = 1;
-          ctx.drawImage(prev,-sx,-sy,sw,sh);
+        /* ─── Background ─── */
+        if(imgs.length>0){
+          const imgIdx=Math.min(Math.floor(t/secPerImg),imgs.length-1);
+          const imgT=(t%secPerImg)/secPerImg;
+          const fadeZ=0.12;
+          let alpha=1;
+          if(imgT<fadeZ)alpha=imgT/fadeZ;
+          else if(imgT>1-fadeZ)alpha=(1-imgT)/fadeZ;
+          const scale=1+imgT*0.06;
+          const sw=W*scale,sh=H*scale,sx=(sw-W)/2,sy=(sh-H)/2;
+          if(alpha<1&&imgIdx>0){ctx.globalAlpha=1;ctx.drawImage(imgs[imgIdx-1],-sx,-sy,sw,sh);}
+          ctx.globalAlpha=alpha;
+          ctx.drawImage(imgs[imgIdx],-sx,-sy,sw,sh);
+          ctx.globalAlpha=1;
+          // cinematic overlay
+          const ov=ctx.createLinearGradient(0,0,0,H);
+          ov.addColorStop(0,"rgba(0,0,0,0.25)");
+          ov.addColorStop(0.45,"rgba(0,0,0,0.0)");
+          ov.addColorStop(1,"rgba(0,0,0,0.80)");
+          ctx.fillStyle=ov; ctx.fillRect(0,0,W,H);
+          // colour tint
+          ctx.fillStyle=`rgba(80,0,80,${0.08+Math.sin(t*0.3)*0.04})`;
+          ctx.fillRect(0,0,W,H);
+        } else {
+          // No images: animated dark gradient background
+          const hue1=200+Math.sin(t*0.2)*60;
+          const hue2=280+Math.cos(t*0.15)*60;
+          const hue3=330+Math.sin(t*0.1)*40;
+          const bg=ctx.createRadialGradient(W*0.3,H*0.3,0,W*0.5,H*0.5,W*0.9);
+          bg.addColorStop(0,`hsla(${hue1},60%,15%,1)`);
+          bg.addColorStop(0.4,`hsla(${hue2},55%,10%,1)`);
+          bg.addColorStop(0.75,`hsla(${hue3},65%,8%,1)`);
+          bg.addColorStop(1,"#030009");
+          ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+          // aurora wave
+          for(let a=0;a<3;a++){
+            const ag=ctx.createLinearGradient(0,H*(0.2+a*0.25),W,H*(0.35+a*0.25));
+            ag.addColorStop(0,"transparent");
+            ag.addColorStop(0.4,`hsla(${280+a*40},80%,60%,${0.06+Math.sin(t*0.4+a)*0.04})`);
+            ag.addColorStop(1,"transparent");
+            ctx.fillStyle=ag;
+            ctx.fillRect(0,0,W,H);
+          }
+          // Stars
+          stars.forEach(s=>{
+            s.twinkle+=0.04;
+            const alpha=0.3+Math.sin(s.twinkle)*0.3;
+            ctx.beginPath();
+            ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+            ctx.fillStyle=`rgba(255,255,255,${alpha})`;
+            ctx.fill();
+          });
         }
 
-        ctx.globalAlpha = imgAlpha;
-        ctx.drawImage(img,-sx,-sy,sw,sh);
-        ctx.globalAlpha = 1;
-
-        // Dark overlay
-        const grad = ctx.createLinearGradient(0,0,0,H);
-        grad.addColorStop(0,"rgba(0,0,0,0.22)");
-        grad.addColorStop(0.5,"rgba(0,0,0,0.0)");
-        grad.addColorStop(1,"rgba(0,0,0,0.68)");
-        ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
-
-        // Confetti
-        particles.forEach(p=>{
-          p.x+=p.vx; p.y+=p.vy; p.spin+=p.spinV;
+        /* ─── Confetti ─── */
+        confettiPieces.forEach(p=>{
+          p.x+=p.vx;p.y+=p.vy;p.spin+=p.spinV;
           if(p.y>H+10){p.y=-10;p.x=Math.random()*W;}
-          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.spin);
-          ctx.fillStyle=p.color; ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
+          ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.spin);
+          ctx.globalAlpha=0.82;
+          ctx.fillStyle=p.color;
+          if(p.shape==="circle"){ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();}
+          else ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
           ctx.restore();
         });
 
-        // Balloons
+        /* ─── Balloons ─── */
         balloons.forEach(b=>{
-          b.y-=b.vy;
-          if(b.y<-130){b.y=H+100+Math.random()*80;}
-          drawBalloon(ctx,b.x,b.y,b.w,b.h,b.color);
+          b.y-=b.vy; b.swing+=b.swingS;
+          if(b.y<-150){b.y=H+130+Math.random()*100;}
+          const sway=Math.sin(b.swing)*18;
+          drawVideoBalloon(ctx,b.x+sway,b.y,b.w,b.h,b.color);
         });
 
-        // Quotes
+        /* ─── Quote cycle ─── */
         quoteTimer++;
-        if(quoteTimer>=QUOTE_SWITCH){quoteTimer=0;quoteIdx=(quoteIdx+1)%evData.quotes.length;}
+        if(quoteTimer>=QUOTE_SWITCH){quoteTimer=0;quoteIdx=(quoteIdx+1)%ev.quotes.length;}
 
-        // Main title (fade in during first 2s)
-        const titleA = Math.min(1, t/2);
+        /* ─── Title (fade in 0–2.5s) ─── */
+        const titleA=Math.min(1,t/2.5);
         ctx.save();
-        ctx.globalAlpha = titleA;
-        ctx.textAlign   = "center";
-        ctx.shadowColor = "rgba(0,0,0,0.8)";
-        ctx.shadowBlur  = 22;
-        ctx.fillStyle   = "#ffffff";
-        ctx.font        = `bold ${W*0.062}px Georgia, serif`;
-        wrapText(ctx, evData.msg, W/2, H*0.76, W*0.86, W*0.076);
+        ctx.globalAlpha=titleA;
+        ctx.textAlign="center";
+        // Gold gradient text
+        const tg=ctx.createLinearGradient(W*0.1,0,W*0.9,0);
+        tg.addColorStop(0,"#fff");
+        tg.addColorStop(0.3,"#fde68a");
+        tg.addColorStop(0.6,"#f9a8d4");
+        tg.addColorStop(1,"#c4b5fd");
+        ctx.fillStyle=tg;
+        ctx.font=`bold ${FS}px 'Georgia',serif`;
+        ctx.shadowColor="rgba(0,0,0,0.9)";
+        ctx.shadowBlur=30;
+        wrapText(ctx,ev.msg,W/2,H*0.75,W*0.88,FS*1.25);
         ctx.restore();
 
-        // Quote
+        /* ─── Quote ─── */
+        const qFade=Math.min(1,(t-2)/1.5);
+        if(qFade>0){
+          ctx.save();
+          ctx.globalAlpha=qFade*0.88;
+          ctx.textAlign="center";
+          ctx.fillStyle="#fde68a";
+          ctx.font=`italic ${FS*0.52}px 'Georgia',serif`;
+          ctx.shadowColor="rgba(0,0,0,0.7)";
+          ctx.shadowBlur=16;
+          ctx.fillText(ev.quotes[quoteIdx],W/2,H*0.88);
+          ctx.restore();
+        }
+
+        /* ─── Timestamp watermark ─── */
         ctx.save();
-        ctx.globalAlpha = 0.9;
-        ctx.textAlign   = "center";
-        ctx.shadowColor = "rgba(0,0,0,0.7)";
-        ctx.shadowBlur  = 14;
-        ctx.fillStyle   = "#ffe4b5";
-        ctx.font        = `italic ${W*0.038}px Georgia, serif`;
-        ctx.fillText(evData.quotes[quoteIdx], W/2, H*0.88);
+        ctx.globalAlpha=0.25;
+        ctx.fillStyle="#fff";
+        ctx.font=`${W*0.018}px Georgia,serif`;
+        ctx.textAlign="right";
+        ctx.fillText("✦ WishCraft",W-W*0.025,H-H*0.02);
         ctx.restore();
 
-        if(frame%30===0) setFill(8+Math.round((frame/TOTAL_FR)*88));
+        if(frame%30===0) setFill(8+Math.round(progress*88));
         frame++;
         requestAnimationFrame(renderFrame);
       }
@@ -373,41 +511,38 @@
       renderFrame();
     }
 
-    function drawBalloon(ctx,x,y,w,h,color){
-      ctx.save(); ctx.globalAlpha=0.78;
-      ctx.beginPath();
-      ctx.ellipse(x,y,w/2,h/2,0,0,Math.PI*2);
-      ctx.fillStyle=color; ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(x-w*0.12,y-h*0.15,w*0.12,h*0.1,-0.5,0,Math.PI*2);
-      ctx.fillStyle="rgba(255,255,255,0.32)"; ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(x,y+h/2); ctx.lineTo(x,y+h/2+38);
-      ctx.strokeStyle="rgba(255,255,255,0.38)"; ctx.lineWidth=1; ctx.stroke();
+    function drawVideoBalloon(ctx,x,y,w,h,color){
+      ctx.save();ctx.globalAlpha=0.78;
+      ctx.beginPath();ctx.ellipse(x,y,w/2,h/2,0,0,Math.PI*2);
+      ctx.fillStyle=color;ctx.fill();
+      ctx.beginPath();ctx.ellipse(x-w*0.14,y-h*0.16,w*0.13,h*0.1,-0.5,0,Math.PI*2);
+      ctx.fillStyle="rgba(255,255,255,0.35)";ctx.fill();
+      ctx.beginPath();ctx.moveTo(x,y+h/2);ctx.lineTo(x,y+h/2+45);
+      ctx.strokeStyle="rgba(255,255,255,0.35)";ctx.lineWidth=1.5;ctx.stroke();
       ctx.restore();
     }
 
     function wrapText(ctx,text,x,y,maxW,lineH){
-      const words=text.split(" "); let line=""; const lines=[];
+      const words=text.split(" ");let line="";const lines=[];
       for(let w of words){
-        const test=line+w+" ";
-        if(ctx.measureText(test).width>maxW&&line){lines.push(line.trim());line=w+" ";}
-        else line=test;
+        const t=line+w+" ";
+        if(ctx.measureText(t).width>maxW&&line){lines.push(line.trim());line=w+" ";}
+        else line=t;
       }
-      if(line) lines.push(line.trim());
+      if(line)lines.push(line.trim());
       const startY=y-(lines.length-1)*lineH/2;
       lines.forEach((l,i)=>ctx.fillText(l,x,startY+i*lineH));
     }
 
     function loadImg(src){
       return new Promise(res=>{
-        const i=new Image(); i.crossOrigin="anonymous";
-        i.onload=()=>res(i); i.src=src;
+        const i=new Image();i.crossOrigin="anonymous";
+        i.onload=()=>res(i);i.src=src;
       });
     }
 
-    function setLabel(t){ document.getElementById("vidLabel").textContent=t; }
-    function setFill(p){ document.getElementById("vidFill").style.width=p+"%"; }
+    function setLabel(t){document.getElementById("vidLabel").textContent=t;}
+    function setFill(p){document.getElementById("vidFill").style.width=p+"%";}
   </script>
 </body>
 </html>
